@@ -20,18 +20,21 @@ const (
 func parsePackage(data string) (int, time.Duration, error) {
 	dataString := strings.Split(data, ",")
 	if len(dataString) != 2 {
-		return 0, 0, errors.New("Ошибка: в слайсе содержится не два значения")
+		return 0, 0, errors.New("Fail:an insufficient quantity ")
 	}
 	stepsInt, err := strconv.Atoi(dataString[0])
 	if err != nil {
-		return 0, 0, errors.New("Ошибка: Не удалось конвертировать строку в число")
+		return 0, 0, errors.New("Fail: conversion string to int")
 	}
 	if stepsInt <= 0 {
-		return 0, 0, errors.New("Ошибка: 0 шагов")
+		return 0, 0, errors.New("Fail: steps 0 ")
 	}
 	duration, err := time.ParseDuration(dataString[1])
 	if err != nil {
-		return 0, 0, errors.New("Ошибка: Не удалось конвертировать строку во время")
+		return 0, 0, errors.New("Fail: conversion string to time")
+	}
+	if duration <= 0 {
+		return 0, 0, errors.New("Fail: duration 0 ")
 	}
 	return stepsInt, duration, nil
 }
@@ -53,5 +56,5 @@ func DayActionInfo(data string, weight, height float64) string {
 		fmt.Println(calorieserr)
 		return ""
 	}
-	return fmt.Sprintf("Количество шагов: %d.\nДистанция составила %.2f км.\nВы сожгли %.2f ккал.\n", steps, distanceKm, calories)
+	return fmt.Sprintf("Количество шагов: %d.\nДиcтaнция составила %.2f км.\nBы сожгли %.2f ккал.\n", steps, distanceKm, calories)
 }

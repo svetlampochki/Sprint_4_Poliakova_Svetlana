@@ -34,6 +34,9 @@ func parseTraining(data string) (int, string, time.Duration, error) {
 	if err != nil {
 		return 0, "", 0, errors.New("Ошибка: Не удалось конвертировать строку во время")
 	}
+	if duration <= 0 {
+		return 0, "", 0, errors.New("Ошибка: 0 шагов")
+	}
 	return steps, DataString[1], duration, nil
 }
 
@@ -51,66 +54,66 @@ func meanSpeed(steps int, height float64, duration time.Duration) float64 {
 }
 
 func TrainingInfo(data string, weight, height float64) (string, error) {
-	steps, Activity, duration, err := parseTraining(data)
+	steps, activity, duration, err := parseTraining(data)
 	if err != nil {
-		log.Println("Ошибка: не удалось парсировать", err)
+		log.Println("Fail: parsing", err)
 		return "", err
 	}
 	if steps <= 0 {
-		err := errors.New("Ошибка: 0 шагов")
-		log.Println("Ошибка:", err)
+		err := errors.New("Fail: 0 steps")
+		log.Println("Fail:", err)
 		return "", err
 	}
 	if weight <= 0 {
-		err := errors.New("Ошибка: вес = 0 ")
-		log.Println("Ошибка:", err)
+		err := errors.New("Fail: weight = 0 ")
+		log.Println("Fail:", err)
 		return "", err
 	}
 	if height <= 0 {
-		err := errors.New("Ошибка: рост = 0 ")
-		log.Println("Ошибка:", err)
+		err := errors.New("Fail: height = 0 ")
+		log.Println("Fail:", err)
 		return "", err
 	}
 	if duration <= 0 {
-		err := errors.New("Ошибка: продолжительность = 0 ")
-		log.Println("Ошибка:", err)
+		err := errors.New("Fail: duration = 0 ")
+		log.Println("Fail:", err)
 		return "", err
 	}
-	var сall float64
+	var call float64
 	var errCall error
 
 	distanceKm := distance(steps, height)
 	meanSpeedKmH := meanSpeed(steps, height, duration)
-	switch Activity {
+	switch activity {
 	case "Ходьба":
-		сall, errCall = WalkingSpentCalories(steps, weight, height, duration)
+		call, errCall = WalkingSpentCalories(steps, weight, height, duration)
 	case "Бег":
-		сall, errCall = RunningSpentCalories(steps, weight, height, duration)
+		call, errCall = RunningSpentCalories(steps, weight, height, duration)
 	default:
 		err := fmt.Errorf("неизвестный тип тренировки")
-		log.Println("Ошибка:", err)
+		log.Println("Fail:", err)
 		return "", err
 	}
 	if errCall != nil {
-		log.Println("Ошибка расчёта калорий:", errCall)
+		log.Println("Fail spent calories:", errCall)
 		return "", errCall
 	}
 
-	result := fmt.Sprintf("Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f\n", Activity, duration.Hours(), distanceKm, meanSpeedKmH, сall)
+	result := fmt.Sprintf("Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f\n", activity, duration.Hours(), distanceKm, meanSpeedKmH, call)
 	return result, nil
 }
 func RunningSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
 	if steps <= 0 {
-		return 0, errors.New("Ошибка: 0 шагов")
+		return 0, errors.New("Fail: 0 шагов")
 	}
 	if weight <= 0 {
-		return 0, errors.New("Ошибка: вес = 0 ")
+		return 0, errors.New("Fail: weight = 0 ")
 	}
 	if height <= 0 {
-		return 0, errors.New("Ошибка: рост = 0 ")
+		return 0, errors.New("Fail: height = 0 ")
 	}
 	if duration <= 0 {
-		return 0, errors.New("Ошибка: продолжительность = 0 ")
+		return 0, errors.New("Fail: duration = 0 ")
 	}
 	meanSpeed := meanSpeed(steps, height, duration)
 	durationInMinutes := duration.Minutes()
@@ -120,16 +123,16 @@ func RunningSpentCalories(steps int, weight, height float64, duration time.Durat
 
 func WalkingSpentCalories(steps int, weight, height float64, duration time.Duration) (float64, error) {
 	if steps <= 0 {
-		return 0, errors.New("Ошибка: 0 шагов")
+		return 0, errors.New("Fail: 0 steps")
 	}
 	if weight <= 0 {
-		return 0, errors.New("Ошибка: вес = 0 ")
+		return 0, errors.New("Fail: weight = 0 ")
 	}
 	if height <= 0 {
-		return 0, errors.New("Ошибка: рост = 0 ")
+		return 0, errors.New("Fail: height = 0 ")
 	}
 	if duration <= 0 {
-		return 0, errors.New("Ошибка: продолжительность = 0 ")
+		return 0, errors.New("Fail: duration = 0 ")
 	}
 	meanSpeed := meanSpeed(steps, height, duration)
 	durationMin := duration.Minutes()
