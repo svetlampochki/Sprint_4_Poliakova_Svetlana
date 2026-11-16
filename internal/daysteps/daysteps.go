@@ -56,5 +56,5 @@ func DayActionInfo(data string, weight, height float64) string {
 		fmt.Println(calorieserr)
 		return ""
 	}
-	return fmt.Sprintf("Количество шагов: %d.\nДиcтaнция составила %.2f км.\nBы сожгли %.2f ккал.\n", steps, distanceKm, calories)
+	return fmt.Sprintf("Количество шагов: %d.\nДистанция составила %.2f км.\nВы сожгли %.2f ккал.\n", steps, distanceKm, calories)
 }
